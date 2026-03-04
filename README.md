@@ -325,43 +325,6 @@ To meet Business Requirement 4—providing insights to both technical and non-te
 
 **🔗 Access the Streamlit Dashboard here:** *[LINK_TO_YOUR_STREAMLIT_APP]* (add link here-Sundeep)
 
-
-
-## Development Roadmap
-
-`[Document challenges faced and strategies used to overcome them as you work through the project.]`
-
-**Skills and tools to explore next based on this project:**
-- SHAP values for per-transaction model explainability
-- Real-time scoring pipelines — serving the model as an API endpoint
-- Power BI dataflows for live data source connections
-
----
-
-## Deployment
-
-### Power BI
-
-The dashboard was built in Power BI Desktop and published to Power BI Service.
-
-`[https://app.powerbi.com/groups/me/reports/c905dbfb-12c9-4f6c-8399-be3ee104a970/8b1b638210262dc40015?experience=power-bi]`
-
-
-## Main Data Analysis Libraries
-
-| Library | Purpose | Example Usage |
-|---|---|---|
-| Pandas | Data cleaning, transformation, groupby analysis | `df = pd.read_csv('fraudTrain.csv')` |
-| NumPy | Numerical operations, haversine distance calculation | `np.radians(df['lat'])` |
-| Matplotlib | Static plotting for notebook EDA | `plt.hist(df['trans_hour'])` |
-| Seaborn | Advanced statistical plots | `sns.boxplot(x='is_fraud', y='amt', data=df)` |
-| Plotly | Interactive charts prototyped in notebooks | `px.bar(cat_fraud, x='fraud_rate', y='category', orientation='h')` |
-| Scikit-learn | ML models, evaluation metrics, train/test split | `LogisticRegression().fit(X_train, y_train)` |
-| XGBoost | Final fraud classification model | `XGBClassifier(scale_pos_weight=spw).fit(X_train, y_train)` |
-| SciPy | Statistical hypothesis testing | `chi2_contingency(pd.crosstab(df['category'], df['is_fraud']))` |
-| Imbalanced-learn | SMOTE oversampling | `SMOTE().fit_resample(X_train, y_train)` |
-| Power BI | Interactive dashboard, slicers, KPIs, maps | Choropleth map, dual-axis chart, drill-through table |
-
 ---
 
 ## Credits
@@ -372,10 +335,6 @@ The dashboard was built in Power BI Desktop and published to Power BI Service.
 - Code Institute README template: [da-README-template](https://github.com/Code-Institute-Solutions/da-README-template)
 - `[Add any tutorials, Stack Overflow answers, or documentation referenced during the project]`
 
-### Media
-
-- Code Institute logo used with permission from Code Institute
-
 ### Tools
 
 - [Claude by Anthropic](https://claude.ai) — used for ideation, code templates, hypothesis framing, and README structure. All outputs reviewed and validated before use.
@@ -383,5 +342,11 @@ The dashboard was built in Power BI Desktop and published to Power BI Service.
 ---
 
 ## Acknowledgements
+This project was developed during a  End of Course Hackathon , and I'd like to extend my thanks to:
 
-`[Thank your facilitator, cohort peers, or anyone who provided support through the project]`
+- The **hackathon organisers** for creating such an engaging challenge
+- My **teammates Sundeep and Syed** for your collaboration, late-night debugging sessions, and shared excitement made this project a success
+- Our **mentors and facilitators** in particular **Vasi Pavaloi** who provided guidance when we hit roadblocks
+- The **Code Institute community** for the foundation in data analytics that made this project possible
+
+Finally, thanks to kartik2112 on Kaggle for the synthetic fraud detection dataset, which made this analysis possible while respecting data privacy principles.
