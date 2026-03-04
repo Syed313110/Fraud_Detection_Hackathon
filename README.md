@@ -218,15 +218,49 @@ The analysis combined exploratory data analysis, statistical testing, and machin
 - Log transformation of transaction amount to reduce right skew
 
 **Generative AI Usage:**
-Claude (Anthropic) was used to assist with code templates, hypothesis framing, feature engineering approaches, and README structure. All AI-assisted code was reviewed, tested, and understood before use. AI was not used to generate analysis conclusions — all findings are based on actual data outputs.
+Claude (Anthropic) was used to assist with code templates, hypothesis framing, feature engineering approaches, and README structure. All AI-assisted code was reviewed, tested, and understood before use. AI was not used to generate analysis conclusions, all findings are based on actual data outputs.
 
 **Limitations and Alternative Approaches:**
-- The dataset is synthetically generated, meaning patterns may not fully reflect real-world fraud distributions. This is disclosed transparently throughout the project.
-- Gender and age were intentionally excluded from modelling due to fairness concerns — an alternative approach would be to include them and perform post-hoc bias auditing, but exclusion was the more conservative and defensible choice given the regulatory context.
+- The dataset is synthetically generated, meaning patterns may not fully reflect real world fraud distributions. This is disclosed transparently throughout the project.
+- Gender and age were intentionally excluded from modelling due to fairness concerns an alternative approach would be to include them and perform post-hoc bias auditing, but exclusion was the more conservative and defensible choice given the regulatory context.
 - SMOTE was applied to address class imbalance. An alternative was using `scale_pos_weight` in XGBoost directly, but SMOTE produced better recall on the validation set.
-- The dataset lacks per-customer transaction history, preventing velocity features (e.g. number of transactions in the last hour per card) which are highly valuable in real fraud detection systems.
+- The dataset lacks per customer transaction history, preventing velocity features (e.g. number of transactions in the last hour per card) which are highly valuable in real fraud detection systems.
+### Dashboard Design & Deployment
+
+To meet Business Requirement 4—providing insights to both technical and non-technical stakeholders—we developed **two complementary interactive dashboards**. This dual approach ensures accessibility and depth for all users.
+
+#### 1. Power BI Dashboard (For Senior Leadership & Fraud Ops)
+**Design Philosophy:** Clean, executive-focused, and narrative-driven. The design prioritizes key insights and allows for guided exploration.
+
+*   **Pages:**
+    *   **Executive Summary Page:** Features high-level KPIs (total transactions, total fraud, overall fraud rate), the choropleth map for geographic risk, and the dual-axis chart for fraud by hour. The goal is to provide an immediate, boardroom-ready overview.
+    *   **Deep Dive Analysis Page:** Includes the fraud-by-category bar chart, box plots for amount/distance, and model performance metrics (feature importance). Slicers for `merchant category`, `state`, and `hour` allow the fraud operations team to filter and investigate specific segments.
+
+*   **Key Design Choices:**
+    *   **Narrative Flow:** The layout guides the user from "What is the overall problem?" (summary) to "Where exactly is it happening?" (detailed analysis).
+    *   **Interactivity:** Slicers and drill-through actions enable dynamic exploration without overwhelming the main view.
+    *   **Clarity:** Chart titles and tooltips are written in plain English, explaining what the user should observe (e.g., "Fraud rate spikes to >2% in the early morning hours").
+
+**🔗 Access the Power BI Dashboard here:** [Fraud Detection Power BI Dashboard](https://app.powerbi.com/groups/me/reports/c905dbfb-12c9-4f6c-8399-be3ee104a970/8b1b638210262dc40015?experience=power-bi)
+
+![Fraud Analysis](Images/PowerBI1.png) 
+--
+![Fraud Operations Team](Images/PowerBI2.png)
+
+#### 2. Streamlit Dashboard (For Technical Exploration & Model Interaction)
+**Design Philosophy:** Interactive, code-backed, and focused on the model. This dashboard allows for deeper technical exploration and what-if analysis.
+
+*   **Features:**
+    *   **Data Explorer:** An interactive table to view the raw processed data, filter by conditions, and download subsets.
+    *   **Dynamic EDA:** Users can select any feature (e.g., `amt`, `home_merch_dist`, `age`) and instantly generate histograms and box plots comparing distributions for fraud vs. non-fraud transactions.
+    *   **Model Playground:** A section where users can adjust the classification threshold via a slider and see the impact on the confusion matrix, precision, recall, and F1-score in real time. This makes the model's trade-off tangible.
+
+*   **Deployment:** The Streamlit app is hosted on the Streamlit Community Cloud, making it easily accessible via a web link.
+
+**🔗 Access the Streamlit Dashboard here:** *[LINK_TO_YOUR_STREAMLIT_APP]* (add link here-Sundeep)
 
 ---
+
 ### Development Roadmap & Challenges Faced
 
 This project, while rewarding, came with its own set of technical and analytical challenges. Here’s a look at the key hurdles and how they were addressed:
@@ -241,7 +275,7 @@ This project, while rewarding, came with its own set of technical and analytical
 
 #### Challenge 3: Designing for Two Distinct Audiences
 *   **Problem:** Business Requirement 4 explicitly called for a dashboard useful for both the fraud operations team (who need granular data) and senior leadership (who need high-level summaries). One single dashboard page would fail to serve either group effectively.
-*   **Solution:** We pivoted from a single-dashboard approach to a **two-dashboard strategy**. The Power BI dashboard was designed with two separate pages—one for executives and one for analysts. To further cater to technical needs, we built a separate Streamlit app, providing a flexible environment for ad-hoc data exploration and model interaction.
+*   **Solution:** We pivoted from a single-dashboard approach to a **two dashboard strategy**. The Power BI dashboard was designed with two separate pages—one for executives and one for analysts. To further cater to technical needs, we built a separate Streamlit app, providing a flexible environment for ad-hoc data exploration and model interaction.
 
 #### Challenge 4: Ethical Data Handling & Feature Selection
 *   **Problem:** The dataset contained columns that could be considered PII (`first`, `last`, `street`, `cc_num`) and potentially biased attributes (`gender`, `age`). Simply including all features in the model would be unethical and could lead to a model that discriminates unfairly.
@@ -258,8 +292,7 @@ This project leveraged a range of Python libraries for data processing, analysis
 
 #### Data Visualization
 *   **matplotlib & seaborn:** Used for generating static plots during EDA (box plots, histograms, heatmaps) and for initial chart prototyping.
-*   **plotly (optional):** *[Mention if used in the Streamlit app for interactive charts]*
-
+*   **plotly** for interactive chart prototyping in notebooks.
 #### Machine Learning & Modeling
 *   **scikit-learn:** For the Logistic Regression baseline, train/test splitting, SMOTE, and evaluation metrics (precision, recall, ROC-AUC).
 *   **xgboost:** For the primary predictive model, valued for its performance on imbalanced tabular data and built-in feature importance.
@@ -267,20 +300,19 @@ This project leveraged a range of Python libraries for data processing, analysis
 #### Dashboard Development & Deployment
 *   **Power BI:** Used for creating the primary executive and operational dashboard, connecting directly to the processed CSV data.
 *   **streamlit:** Used to build the supplementary, interactive web application for technical exploration.
-*   **streamlit-aggrid:** *[Optional: Add if used for interactive tables in Streamlit]*
-*   **Pillow / PIL:** *[Often used in Streamlit for image handling, if you display logos or static images]*
+*
 
 
 ## Ethical Considerations
 
-Ethics was treated as a **first-order concern** throughout this project, not an afterthought. Every stage—from data selection to model deployment—included deliberate ethical reflection. Below is full transparency on the decisions made and their rationale.
+Ethics was treated as a **first-order concern** throughout this project, not an afterthought. Every stage from data selection to model deployment included deliberate ethical reflection. Below is full transparency on the decisions made and their rationale.
 
 ---
 
 ### Data Ethics
 
 **Choice of Synthetic Data**
-I deliberately selected a synthetically generated dataset for this project. Working with real cardholder transaction data would introduce significant data privacy obligations outside the scope of an educational project. The synthetic dataset also provides interpretable column names — merchant category, transaction hour, geographic location — enabling clearer visualisations and more meaningful business communication. 
+I deliberately selected a synthetically generated dataset for this project. Working with real cardholder transaction data would introduce significant data privacy obligations outside the scope of an educational project. The synthetic dataset also provides interpretable column names  merchant category, transaction hour, geographic location enabling clearer visualisations and more meaningful business communication. 
 
 **Key benefits of this choice:**
 - No real customer data at risk
@@ -410,43 +442,6 @@ This project reinforced several key ethical principles for data science:
 
 
 ---
-
-### Dashboard Design & Deployment
-
-To meet Business Requirement 4—providing insights to both technical and non-technical stakeholders—we developed **two complementary interactive dashboards**. This dual approach ensures accessibility and depth for all users.
-
-#### 1. Power BI Dashboard (For Senior Leadership & Fraud Ops)
-**Design Philosophy:** Clean, executive-focused, and narrative-driven. The design prioritizes key insights and allows for guided exploration.
-
-*   **Pages:**
-    *   **Executive Summary Page:** Features high-level KPIs (total transactions, total fraud, overall fraud rate), the choropleth map for geographic risk, and the dual-axis chart for fraud by hour. The goal is to provide an immediate, boardroom-ready overview.
-    *   **Deep Dive Analysis Page:** Includes the fraud-by-category bar chart, box plots for amount/distance, and model performance metrics (feature importance). Slicers for `merchant category`, `state`, and `hour` allow the fraud operations team to filter and investigate specific segments.
-
-*   **Key Design Choices:**
-    *   **Narrative Flow:** The layout guides the user from "What is the overall problem?" (summary) to "Where exactly is it happening?" (detailed analysis).
-    *   **Interactivity:** Slicers and drill-through actions enable dynamic exploration without overwhelming the main view.
-    *   **Clarity:** Chart titles and tooltips are written in plain English, explaining what the user should observe (e.g., "Fraud rate spikes to >2% in the early morning hours").
-
-**🔗 Access the Power BI Dashboard here:** [Fraud Detection Power BI Dashboard](https://app.powerbi.com/groups/me/reports/c905dbfb-12c9-4f6c-8399-be3ee104a970/8b1b638210262dc40015?experience=power-bi)
-
-![Fraud Analysis](Images/PowerBI1.png) 
---
-![Fraud Operations Team](Images/PowerBI2.png)
-
-#### 2. Streamlit Dashboard (For Technical Exploration & Model Interaction)
-**Design Philosophy:** Interactive, code-backed, and focused on the model. This dashboard allows for deeper technical exploration and what-if analysis.
-
-*   **Features:**
-    *   **Data Explorer:** An interactive table to view the raw processed data, filter by conditions, and download subsets.
-    *   **Dynamic EDA:** Users can select any feature (e.g., `amt`, `home_merch_dist`, `age`) and instantly generate histograms and box plots comparing distributions for fraud vs. non-fraud transactions.
-    *   **Model Playground:** A section where users can adjust the classification threshold via a slider and see the impact on the confusion matrix, precision, recall, and F1-score in real-time. This makes the model's trade-off tangible.
-
-*   **Deployment:** The Streamlit app is hosted on the Streamlit Community Cloud, making it easily accessible via a web link.
-
-**🔗 Access the Streamlit Dashboard here:** *[LINK_TO_YOUR_STREAMLIT_APP]* (add link here-Sundeep)
-
----
-
 ## Credits
 
 ### Content
