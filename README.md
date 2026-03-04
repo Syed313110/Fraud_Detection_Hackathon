@@ -270,24 +270,144 @@ This project leveraged a range of Python libraries for data processing, analysis
 *   **streamlit-aggrid:** *[Optional: Add if used for interactive tables in Streamlit]*
 *   **Pillow / PIL:** *[Often used in Streamlit for image handling, if you display logos or static images]*
 
+
 ## Ethical Considerations
 
-Ethics was treated as a first-order concern throughout this project, not an afterthought. The following decisions were made deliberately and are documented here for full transparency.
+Ethics was treated as a **first-order concern** throughout this project, not an afterthought. Every stage—from data selection to model deployment—included deliberate ethical reflection. Below is full transparency on the decisions made and their rationale.
 
-**Choice of Synthetic Data:**
-I deliberately selected a synthetically generated dataset for this project. Working with real cardholder transaction data would introduce significant data privacy obligations outside the scope of an educational project. The synthetic dataset also provides interpretable column names — merchant category, transaction hour, geographic location — enabling clearer visualisations and more meaningful business communication. The use of synthetic data is explicitly disclosed in this README and within the dashboard itself.
+---
 
-**PII Removal:**
-Although the dataset is synthetic, it contains simulated personal fields including cardholder names (`first`, `last`), street address (`street`), and card number (`cc_num`). These columns were dropped as the **very first step** in the data cleaning notebook — before any analysis, visualisation, or modelling was performed. This reflects the principle that PII, even synthetic, should be handled with the same discipline as real personal data and establishes responsible practice for working with real datasets in the future.
+### Data Ethics
 
-**Bias and Fairness — Gender and Age Exclusion:**
-The dataset contains `gender` and `dob` (from which age is derived). Both were used for EDA visualisation only and were **explicitly excluded from the model feature set**. Using demographic attributes such as gender or age as fraud predictors risks creating a discriminatory model — one that flags transactions based on who the cardholder is rather than what the transaction looks like. This would likely conflict with the FCA's expectations on algorithmic fairness in financial services and could constitute indirect discrimination under the Equality Act 2010. This decision is documented with a comment in the feature engineering notebook.
+**Choice of Synthetic Data**
+I deliberately selected a synthetically generated dataset for this project. Working with real cardholder transaction data would introduce significant data privacy obligations outside the scope of an educational project. The synthetic dataset also provides interpretable column names — merchant category, transaction hour, geographic location — enabling clearer visualisations and more meaningful business communication. 
 
-**Transparency in Model Trade-offs:**
-The model's precision-recall trade-off is explicitly documented and visualised. Raising recall (catching more fraud) comes at the cost of more false positives — legitimate customer transactions being declined. This has a real human impact and disproportionately harms certain groups if the model has learned demographic patterns from training data. NovaPay would need to conduct further bias testing before any real-world deployment.
+**Key benefits of this choice:**
+- No real customer data at risk
+- Reproducible results for learning purposes
+- Full transparency about data provenance
 
-**Responsible Use Disclaimer:**
-This project is built for educational and portfolio purposes only. The model is not intended for deployment in a live fraud detection system without further validation, independent bias auditing, and appropriate regulatory review under FCA guidelines.
+**Disclosure:** The use of synthetic data is explicitly stated in this README, within the analysis notebooks, and on the dashboards themselves.
+
+**PII Removal (Even Though Synthetic)**
+Although the dataset is simulated, it contains fields that mirror real personally identifiable information (PII):
+- Cardholder names (`first`, `last`)
+- Street address (`street`)
+- Card number (`cc_num`)
+
+These columns were dropped as the **very first step** in the data cleaning notebook — before any analysis, visualisation, or modelling was performed. This reflects the principle that PII, even synthetic, should be handled with the same discipline as real personal data. This establishes responsible habits for working with real datasets in the future.
+
+**Data Provenance & Licensing**
+The dataset is licensed under **CC0 Public Domain**, meaning no restrictions on use. However, I still credit the original creator (kartik2112 on Kaggle) as a professional courtesy.
+
+---
+
+### Fairness & Bias
+
+**Exclusion of Demographic Features**
+The dataset contains `gender` and `dob` (from which `age` is derived). Both were used **for EDA visualisation only** and were **explicitly excluded from the model feature set**.
+
+**Why this matters:**
+Using demographic attributes such as gender or age as fraud predictors risks creating a **discriminatory model** — one that flags transactions based on *who the cardholder is* rather than *what the transaction looks like*. This could:
+
+| Risk | Implication |
+|------|-------------|
+| **Regulatory violation** | Conflict with FCA expectations on algorithmic fairness in financial services |
+| **Legal liability** | Could constitute indirect discrimination under the Equality Act 2010 (UK) |
+| **Customer harm** | Certain demographic groups could be unfairly targeted or declined |
+
+**What we did instead:**
+- Used `gender` and `age` only to check data quality during EDA
+- Documented this decision with inline comments in the feature engineering notebook
+- Built the model exclusively on transaction behaviour features
+
+**Bias Monitoring Consideration**
+If NovaPay were to deploy this model, I would recommend:
+1. **Regular bias audits** across demographic segments
+2. **Fairness metrics** (demographic parity, equal opportunity) alongside accuracy metrics
+3. **Human oversight** for declined transactions
+
+---
+
+### Model Transparency & Trade-offs
+
+**The Precision-Recall Trade-off**
+The model's performance involves an inherent trade-off:
+
+| If we prioritize... | Then we accept... | Business impact |
+|--------------------|-------------------|-----------------|
+| **High Recall** (catch more fraud) | More false positives (legitimate customers declined) | Customer frustration, support costs |
+| **High Precision** (fewer false positives) | More missed fraud | Financial losses, merchant trust erosion |
+
+This trade-off is **explicitly visualised** in the dashboard using a precision-recall curve. The classification threshold is not left at the default 0.5 — it's presented as a **business decision** for NovaPay stakeholders.
+
+**Why this matters ethically:**
+False positives have a **real human impact**. A legitimate customer whose transaction is wrongly declined may:
+- Miss an important purchase
+- Experience embarrassment at checkout
+- Lose trust in NovaPay's platform
+
+These outcomes can disproportionately affect vulnerable customers if the model has learned biased patterns from training data.
+
+**Explainability**
+To ensure the model isn't a black box, I included:
+- **Feature importance charts** showing what drives predictions
+- **Clear documentation** of how each feature was engineered
+- **Interactive threshold tuning** in the Streamlit dashboard
+
+---
+
+### Responsible Use & Limitations
+
+**Intended Use**
+This project is built for **educational and portfolio purposes only**. It demonstrates:
+- End-to-end data analysis workflow
+- Ethical decision-making in ML
+- Clear communication to diverse stakeholders
+
+**Not Intended For:**
+- Live deployment in production fraud detection
+- Making decisions about real customers
+- Use without further regulatory review
+
+**Requirements for Real-World Deployment**
+If NovaPay wished to deploy a similar system, they would need:
+
+1. **Further validation** on real transaction data
+2. **Independent bias auditing** by a third party
+3. **Regulatory review** under FCA guidelines
+4. **Ongoing monitoring** for model drift and fairness
+5. **Customer appeals process** for declined transactions
+
+---
+
+## Ethical Takeaways
+
+This project reinforced several key ethical principles for data science:
+
+| Principle | Application |
+|-----------|-------------|
+| **Privacy by design** | Dropped PII before any analysis |
+| **Fairness first** | Excluded demographic features from modelling |
+| **Transparency** | Documented all decisions and trade-offs |
+| **Human-centered** | Considered impact of false positives on real people |
+| **Accountability** | Clear disclaimer about limitations |
+
+> *"Ethics is not a constraint on data science — it's a foundation for trustworthy, sustainable solutions."*
+
+---
+
+###  Version History & Future Improvements
+
+| Date | Update |
+|------|--------|
+| [Current Date] | Initial ethical considerations documented |
+
+**Future enhancements I'd explore:**
+- Implementing SHAP values for per-transaction explainability
+- Building an interactive fairness dashboard
+- Researching differential privacy techniques for real data scenarios
+
 
 ---
 
@@ -333,12 +453,32 @@ To meet Business Requirement 4—providing insights to both technical and non-te
 
 - Credit Card Transactions Fraud Detection Dataset: [kartik2112 on Kaggle](https://www.kaggle.com/datasets/kartik2112/fraud-detection) — CC0 Public Domain
 - Code Institute README template: [da-README-template](https://github.com/Code-Institute-Solutions/da-README-template)
-- `[Add any tutorials, Stack Overflow answers, or documentation referenced during the project]`
 
-### Tools
 
-- [Claude by Anthropic](https://claude.ai) — used for ideation, code templates, hypothesis framing, and README structure. All outputs reviewed and validated before use.
+### Tools & Technologies
 
+**Development Environment:**
+- **Jupyter Notebook** — for interactive development and EDA
+- **VS Code** — for code editing and repository management
+- **Git & GitHub** — version control and collaboration
+
+**AI Assistance:**
+- **Claude (Anthropic)** — used for ideation, code templates, hypothesis framing, README structure, and troubleshooting. All AI-generated code was reviewed, tested, and understood before implementation.
+- **ChatGPT** — [if used] for [specific purpose, e.g., regex patterns, debugging assistance]
+
+**Project Management:**
+- **GitHub Projects** — for task tracking and sprint planning
+- **Discord/Slack** — team communication during the hackathon
+
+**Documentation:**
+- **Markdown** — README formatting
+- **Power BI** — dashboard creation and publishing
+- **Streamlit Community Cloud** — for hosting the interactive web app
+
+**Learning Resources:**
+- **Stack Overflow** — for troubleshooting code errors
+- **Kaggle** — dataset source and community notebooks for reference
+- **Code Institute learning materials** — foundational concepts and project structure
 ---
 
 ## Acknowledgements
