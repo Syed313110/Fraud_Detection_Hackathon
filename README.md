@@ -1,8 +1,8 @@
-# ![CI logo](https://codeinstitute.s3.amazonaws.com/fullstack/ci_logo_small.png)
+# <img src="https://codeinstitute.s3.amazonaws.com/fullstack/ci_logo_small.png" alt="CI logo" width="140">
 
 # Credit Card Fraud Detection
 
-## Project Overview
+## Project Objectives & Requirement 
 
 This project was developed as part of a team hackathon challenge focused on solving a real-world fintech fraud problem.
 
@@ -21,31 +21,29 @@ NovaPay has experienced:
 - Growing merchant dissatisfaction  
 - Excessive false positives from a rule-based detection system  
 
-Our objective was to use data analysis and machine learning to:
+Our **objective** was to use data analysis and machine learning to:
 
 1. Understand how fraud occurs
 2. Identify behavioural and transactional fraud signals
 3. Build a predictive model with high fraud recall
 4. Deliver an interactive dashboard for operational and executive stakeholders
 
----
-
-# Business Requirements
+**Buisness Requirements:**
 
 1. Identify transaction characteristics strongly associated with fraud.
 2. Analyse the relationship between time, merchant category, transaction amount, and geographic distance with fraud likelihood.
 3. Build a predictive model prioritising recall while maintaining acceptable precision.
 4. Deliver an interactive dashboard for fraud monitoring and executive insight.
 
----
 
-# Dataset
+
+## Dataset
 
 **Name:** Credit Card Transactions Fraud Detection Dataset  
 **Source:** Kaggle (kartik2112)  
 **Licence:** CC0 Public Domain  
 
-## Dataset Overview
+### Dataset Overview
 
 - 1.85 million simulated transactions  
 - Files:
@@ -63,25 +61,64 @@ The dataset was synthetically generated using the Sparkov Data Generation tool a
 
 It was selected due to its interpretable and business-friendly features, allowing meaningful stakeholder-focused visualisation.
 
----
 
-# Methodology
+## Methodology
 
 We followed the **CRISP-DM (Cross-Industry Standard Process for Data Mining)** framework.
 
-## 1. Business Understanding
 
-- Defined fraud detection objectives
-- Evaluated cost of false negatives vs false positives
-- Prioritised recall to minimise missed fraud
+## Project Architecture
 
-## 2. Data Understanding
+The project follows a structured end-to-end analytics pipeline, moving from raw data ingestion through modelling and finally to stakeholder-facing dashboards.
 
-- Loaded dataset using Pandas
-- Checked structure, missing values, class imbalance
-- Performed exploratory data analysis (EDA)
+**Raw Dataset** (Kaggle Fraud Detection Dataset)  
+↓  
+**Data Cleaning & PII Removal**
+- Dropped sensitive fields (`first`, `last`, `street`, `cc_num`)
+- Data type validation and formatting  
 
-## 3. Data Preparation
+↓  
+**Feature Engineering**
+- Haversine distance (cardholder ↔ merchant location)
+- Log transformation of transaction amount
+- Datetime decomposition (`hour`, `day_of_week`, `month`)  
+
+↓  
+**Exploratory Data Analysis**
+- Hypothesis-driven investigation (H1–H3)
+- Fraud rate analysis by hour, merchant category, and geography
+- Statistical tests (Chi-squared, Mann–Whitney U)
+
+↓  
+**Machine Learning**
+- Logistic Regression (interpretable baseline)
+- XGBoost (final model)
+- Class imbalance handling with SMOTE
+
+↓  
+**Model Evaluation**
+- Precision, Recall, F1-score
+- ROC-AUC
+- Precision–Recall trade-off analysis
+- Classification threshold tuning
+
+↓  
+**Insights & Delivery**
+- Power BI dashboard (Executive + Fraud Operations views)
+- Streamlit interactive application
+- Deployment via Heroku
+
+
+
+#### Project Kanban Board:
+To organise the development workflow, a **Kanban board** was created using GitHub Projects.  
+This allowed tasks to be broken down into manageable stages and tracked across columns such as **To Do, In Progress, and Done**.
+
+**Figure 1 – Project Kanban Board**
+
+<p align="center"><img src="assets/project%20plan.png" alt="Project plan" width="900"></p>
+
+## Data Preparation
 
 ### Ethical Data Handling
 
@@ -107,15 +144,10 @@ Excluded `gender` and `age` from modelling to reduce bias risk.
 
 Cleaned dataset exported to `data/processed/`.
 
----
 
-# Data Analysis – Hypothesis Testing
+## Data Analysis
 
----
-
-## H1 – Time of Day and Fraud Risk
-
-### Hypothesis
+### H1 – Time of Day and Fraud Risk
 
 Fraudulent transactions are significantly more likely during late-night hours (22:00–04:00).
 
@@ -129,13 +161,13 @@ Fraudulent transactions are significantly more likely during late-night hours (2
 
 ### Visualisations
 
-**Figure 1 – Fraud Rate & Transaction Volume by Hour**
+**Figure 2 – Fraud Rate & Transaction Volume by Hour**
 
-![alt text](assets/image.png)
+<p align="center"><img src="assets/image.png" alt="Figure 2 – Fraud Rate & Transaction Volume by Hour" width="900"></p>
 
-**Figure 2 – Fraud Rate Trend by Hour**
+**Figure 3 – Fraud Rate Trend by Hour**
 
-![alt text](assets/image-1.png)
+<p align="center"><img src="assets/image-1.png" alt="Figure 3 – Fraud Rate Trend by Hour" width="900"></p>
 
 ### Results
 
@@ -150,21 +182,19 @@ Time of transaction is a significant fraud predictor.
 
 ---
 
-## H2 – Merchant Category and Fraud Risk
-
-### Hypothesis
+### H2 – Merchant Category and Fraud Risk
 
 Fraud is not evenly distributed across merchant categories.
 
 ### Visualisations
 
-**Figure 3 – Fraud Rate by Merchant Category**
+**Figure 4 – Fraud Rate by Merchant Category**
 
-![alt text](assets/image-2.png)
+<p align="center"><img src="assets/image-2.png" alt="Figure 4 – Fraud Rate by Merchant Category" width="900"></p>
 
-**Figure 4 – Category Distribution**
+**Figure 5 – Category Distribution**
 
-![alt text](assets/image-3.png)
+<p align="center"><img src="assets/image-3.png" alt="Figure 5 – Category Distribution" width="900"></p>
 
 ### Results
 
@@ -179,21 +209,19 @@ Merchant category is a statistically significant fraud indicator.
 
 ---
 
-## H3 – Transaction Amount & Geographic Distance
-
-### Hypothesis
+### H3 – Transaction Amount & Geographic Distance
 
 Fraudulent transactions have higher transaction amounts and greater home-to-merchant distance.
 
 ### Visualisations
 
-**Figure 5 – Transaction Amount by Fraud Status**
+**Figure 6 – Transaction Amount by Fraud Status**
 
-![alt text](assets/image-4.png)
+<p align="center"><img src="assets/image-4.png" alt="Figure 6 – Transaction Amount by Fraud Status" width="900"></p>
 
-**Figure 6 – Distance by Fraud Status**
+**Figure 7 – Distance by Fraud Status**
 
-![alt text](assets/image-5.png)
+<p align="center"><img src="assets/image-5.png" alt="Figure 7 – Distance by Fraud Status" width="900"></p>
 
 ### Results
 
@@ -206,140 +234,147 @@ Fraudulent transactions have higher transaction amounts and greater home-to-merc
 Null hypothesis rejected.  
 Transaction amount and geographic distance are strong fraud predictors.
 
----
 
-# Modelling
-
-## Algorithms Used
-
-- Logistic Regression (baseline)
-- XGBoost (final model)
-
-## Evaluation Metrics
-
-- Precision
-- Recall
-- F1-score
-- ROC-AUC
-- Confusion Matrix
-- Precision-Recall Curve
-
-Threshold tuning performed to optimise recall while maintaining operationally acceptable precision.
-
----
-
-# Dashboard Design
-
-## Dashboard Structure
-
-### Executive View
-
-- Fraud rate KPI
-- Trend overview
-
-### Operations View
-
-- Fraud by hour
-- Fraud by category
-- Geographic distribution
-- Model performance monitoring
-
----
-### Analysis Techniques Used
+## Analysis Techniques Used
 
 The analysis combined exploratory data analysis, statistical testing, and machine learning, with a strong emphasis on clear visual communication.
 
 #### Visualisations & Analytical Purpose
 
-1.  **Dual-Axis Chart (Fraud Rate vs. Transaction Volume by Hour)** :
-    *   **Purpose:** To visually test Hypothesis 1 (`H1: Time of Day and Fraud`). This chart overlays the line of fraud rate (%) on top of the bar chart of total transaction volume for each hour of the day. It makes the overnight fraud spike immediately apparent, validating that while transaction volume is low between midnight and 4 AM, the *proportion* of those transactions that are fraudulent is significantly higher.
-![H1: Time of day and Fraud](assets/Fraudrate-Vbd.png) 
-2.  **Horizontal Bar Chart (Fraud Rate by Merchant Category)** :
-    *   **Purpose:** To address Business Requirement 1 and test Hypothesis 2 (`H2: Merchant Category and Fraud`). Sorted from highest to lowest fraud rate, this chart instantly highlights the riskiest merchant categories (e.g., 'grocery_pos', 'shopping_net'). This allows the fraud operations team to prioritize rules or verification steps for specific transaction types.
+**Dual-Axis Chart (Fraud Rate vs. Transaction Volume by Hour)**
 
-![H2: Fraud rate by Category](assets/FraudrateVbcat.png)
+ **Purpose:** To visually test Hypothesis 1 (`H1: Time of Day and Fraud`). This chart overlays the line of fraud rate (%) on top of the bar chart of total transaction volume for each hour of the day. It makes the overnight fraud spike immediately apparent, validating that while transaction volume is low between midnight and 4 AM, the *proportion* of those transactions that are fraudulent is significantly higher.
 
-3.  **Box Plots (Transaction Amount and Home-Merchant Distance by Class)** :
-    *   **Purpose:** To visually validate Hypothesis 3 (`H3: Transaction Amount and Geographic Distance`). By showing the distribution (median, quartiles, outliers) of `amt` and `home_merch_dist` for fraudulent vs. legitimate transactions, these plots clearly demonstrate that fraudulent transactions tend to have higher median amounts and significantly larger geographic distances, confirming the engineered feature's value.
+**Horizontal Bar Chart (Fraud Rate by Merchant Category)**:
 
-![H3: Fraud vs Legitimate transactions](assets/Boxplot.png)
-4.  **Correlation Heatmap** :
-    *   **Purpose:** To support feature engineering and model interpretation (Business Requirement 3). This heatmap visualizes the linear correlation between all numerical features (`amt`, `age`, `home_merch_dist`, etc.) and the target `is_fraud` column. It helps identify which features have the strongest direct relationship with fraud and checks for multicollinearity between features (e.g., `amt` and `log_amt`).
+**Purpose:** To address Business Requirement 1 and test Hypothesis 2 (`H2: Merchant Category and Fraud`). Sorted from highest to lowest fraud rate, this chart instantly highlights the riskiest merchant categories (e.g., 'grocery_pos', 'shopping_net'). This allows the fraud operations team to prioritize rules or verification steps for specific transaction types.
 
-**Descriptive Statistics:**
+**Box Plots (Transaction Amount and Home-Merchant Distance by Class)**:
+
+**Purpose:** To visually validate Hypothesis 3 (`H3: Transaction Amount and Geographic Distance`). By showing the distribution (median, quartiles, outliers) of `amt` and `home_merch_dist` for fraudulent vs. legitimate transactions, these plots clearly demonstrate that fraudulent transactions tend to have higher median amounts and significantly larger geographic distances, confirming the engineered feature's value.
+
+**Correlation Heatmap**:
+
+**Purpose:** To support feature engineering and model interpretation (Business Requirement 3). This heatmap visualizes the linear correlation between all numerical features (`amt`, `age`, `home_merch_dist`, etc.) and the target `is_fraud` column. It helps identify which features have the strongest direct relationship with fraud and checks for multicollinearity between features (e.g., `amt` and `log_amt`).
+
+#### **Descriptive Statistics:**
 - Mean, median, percentiles for transaction amount, age, and distance
 - Fraud rate per group (hour, merchant category, US state)
 - Class balance assessment
 
-**Visualisations:**
-- Dual-axis bar and line chart (fraud rate vs transaction volume by hour)
-- Horizontal bar chart (fraud rate by merchant category, XGBoost feature importance)
-- Box plots (transaction amount and home-merchant distance by class)
-- Correlation heatmap (engineered feature relationships)
-- Choropleth map (fraud rate by US state)
-- Precision-recall curve (model threshold trade-off)
-
-**Statistical Tests:**
+#### **Statistical Tests:**
 - Chi-squared tests to assess the association between categorical variables (merchant category, transaction hour bracket) and fraud label — H1 and H2
 - Mann-Whitney U tests to assess differences in continuous variables (amount, distance) between fraud and legitimate groups — H3
 
-**Machine Learning Models:**
+#### **Machine Learning Models:**
 - Logistic Regression (interpretable baseline)
 - XGBoost (final model — strong performance on imbalanced tabular data with built-in feature importance)
 - Evaluation metrics: Precision, Recall, F1-score, ROC-AUC
 - SMOTE applied to training set only to address class imbalance (~0.58% fraud rate)
 - Classification threshold tuned via Precision-Recall curve
 
-**Feature Engineering:**
+#### **Feature Engineering:**
 - Haversine distance calculated from raw latitude/longitude coordinate pairs — engineered specifically for this project as a geographically meaningful fraud signal
 - Datetime decomposition into hour, day of week, and month
 - Log transformation of transaction amount to reduce right skew
 
-**Generative AI Usage:**
-Claude (Anthropic) was used to assist with code templates, hypothesis framing, feature engineering approaches, and README structure. All AI-assisted code was reviewed, tested, and understood before use. AI was not used to generate analysis conclusions, all findings are based on actual data outputs.
 
-**Limitations and Alternative Approaches:**
-- The dataset is synthetically generated, meaning patterns may not fully reflect real world fraud distributions. This is disclosed transparently throughout the project.
-- Gender and age were intentionally excluded from modelling due to fairness concerns an alternative approach would be to include them and perform post-hoc bias auditing, but exclusion was the more conservative and defensible choice given the regulatory context.
-- SMOTE was applied to address class imbalance. An alternative was using `scale_pos_weight` in XGBoost directly, but SMOTE produced better recall on the validation set.
-- The dataset lacks per customer transaction history, preventing velocity features (e.g. number of transactions in the last hour per card) which are highly valuable in real fraud detection systems.
-### Dashboard Design & Deployment
+## Interactive Dashboard Design & Deployment
 
-To meet Business Requirement 4—providing insights to both technical and non-technical stakeholders—we developed **two complementary interactive dashboards**. This dual approach ensures accessibility and depth for all users.
+To meet Business Requirement 4, providing insights to both technical and non-technical stakeholders, two complementary dashboards were developed.  
+This dual approach ensures both high-level business insights and technical model exploration.
 
-#### 1. Power BI Dashboard (For Senior Leadership & Fraud Ops)
-**Design Philosophy:** Clean, executive-focused, and narrative-driven. The design prioritizes key insights and allows for guided exploration.
 
-*   **Pages:**
-    *   **Executive Summary Page:** Features high-level KPIs (total transactions, total fraud, overall fraud rate), the choropleth map for geographic risk, and the dual-axis chart for fraud by hour. The goal is to provide an immediate, boardroom-ready overview.
-    *   **Deep Dive Analysis Page:** Includes the fraud-by-category bar chart, box plots for amount/distance, and model performance metrics (feature importance). Slicers for `merchant category`, `state`, and `hour` allow the fraud operations team to filter and investigate specific segments.
+### 1. Power BI Dashboard (Senior Leadership & Fraud Operations)
 
-*   **Key Design Choices:**
-    *   **Narrative Flow:** The layout guides the user from "What is the overall problem?" (summary) to "Where exactly is it happening?" (detailed analysis).
-    *   **Interactivity:** Slicers and drill-through actions enable dynamic exploration without overwhelming the main view.
-    *   **Clarity:** Chart titles and tooltips are written in plain English, explaining what the user should observe (e.g., "Fraud rate spikes to >2% in the early morning hours").
+**Design Philosophy:** Clean, executive-focused, and insight-driven. The dashboard highlights key fraud patterns while allowing deeper exploration.
 
-**🔗 Access the Power BI Dashboard here:** [Fraud Detection Power BI Dashboard](https://app.powerbi.com/groups/me/reports/c905dbfb-12c9-4f6c-8399-be3ee104a970/8b1b638210262dc40015?experience=power-bi)
+**Pages**
 
-![Fraud Analysis](assets/PowerBI1.png) 
---
-![Fraud Operations Team](assets/PowerBI2.png)
+**Executive Summary**
+- Key KPIs: total transactions, total fraud cases, overall fraud rate  
+- Geographic fraud distribution (choropleth map)  
+- Fraud rate and transaction volume by hour  
 
-#### 2. Streamlit Dashboard (For Technical Exploration & Model Interaction)
-**Design Philosophy:** Interactive, code-backed, and focused on the model. This dashboard allows for deeper technical exploration and what-if analysis.
+**Deep Dive Analysis**
+- Fraud rate by merchant category  
+- Box plots for transaction amount and home-merchant distance  
+- Model feature importance  
+- Interactive filters for `merchant category`, `state`, and `hour`
 
-*   **Features:**
-    *   **Data Explorer:** An interactive table to view the raw processed data, filter by conditions, and download subsets.
-    *   **Dynamic EDA:** Users can select any feature (e.g., `amt`, `home_merch_dist`, `age`) and instantly generate histograms and box plots comparing distributions for fraud vs. non-fraud transactions.
-    *   **Model Playground:** A section where users can adjust the classification threshold via a slider and see the impact on the confusion matrix, precision, recall, and F1-score in real time. This makes the model's trade-off tangible.
+**Key Design Principles**
+- **Narrative structure:** from high-level overview to detailed analysis  
+- **Interactivity:** slicers allow targeted investigation of fraud patterns  
+- **Clarity:** plain-language chart titles and explanatory tooltips
 
-*   **Deployment:** The Streamlit app is hosted on the Streamlit Community Cloud, making it easily accessible via a web link.
+**🔗 Power BI Dashboard:**  
+https://app.powerbi.com/view?r=eyJrIjoiZjRjYTE1ZGUtOTdhNC00MGRhLTgzMTMtMDY4YmIyNTY1NmNlIiwidCI6ImMyMzNjMDcyLTEzNWItNDMxZC1hZjU5LTM1ZTA1YmFiZjk0MSIsImMiOjh9
 
-**🔗 Access the Streamlit Dashboard here:** Link: https://novapay-1368435f1858.herokuapp.com/
+**Figure 8 – Power BI Executive Summary**
+
+<p align="center">
+<img src="assets/PowerBI1.png" alt="Fraud Analysis Dashboard" width="900">
+</p>
+
+**Figure 9 – Power BI Deep Dive Analysis**
+
+<p align="center">
+<img src="assets/PowerBI2.png" alt="Fraud Operations Analysis" width="900">
+</p>
 
 ---
 
-### Development Roadmap & Challenges Faced
+### 2. Streamlit Dashboard (Technical Exploration & Model Interaction)
+
+**Design Philosophy:** Interactive and model-focused, allowing users to explore the dataset and experiment with model behaviour.
+
+**Key Features**
+
+- **Data Explorer:** View and filter processed transaction data  
+- **Dynamic EDA:** Generate histograms and box plots for selected features (e.g., `amt`, `home_merch_dist`) comparing fraud vs legitimate transactions  
+- **Model Playground:** Adjust the classification threshold with a slider and observe real-time changes in:
+  - confusion matrix
+  - precision
+  - recall
+  - F1-score
+
+**Figure 10 – Streamlit Dashboard**
+
+<p align="center">
+<img src="assets/streamlit.png" alt="Streamlit Dashboard" width="900">
+</p>
+
+---
+
+### Deployment
+
+The Streamlit application was deployed using **Heroku**.
+
+**Deployment Steps**
+- Ensured the main application file was named `app.py`
+- Created a `requirements.txt` file listing required packages
+- Added `setup.sh` and `Procfile` for Heroku configuration
+- Connected the Heroku app to the GitHub repository
+- Deployed the application and tested via Heroku logs
+
+**Challenges Encountered**
+
+**Slug Size Too Large**
+- Initial build exceeded Heroku's 300 MB recommended slug size
+- Resolved by removing unnecessary dependencies from `requirements.txt`
+
+**Application File Location**
+- Deployment initially failed because `app.py` was not in the root directory
+- Restructured the repository so Heroku could correctly locate the application
+
+**Local File Paths**
+- Original code referenced local Windows file paths
+- Updated to repository-relative paths (e.g., `processed/dashboard_data.csv`) to ensure compatibility in the deployed environment
+
+**🔗 Streamlit App:**  
+https://novapay-1368435f1858.herokuapp.com/
+
+## Project Challenges Faced
 
 This project, while rewarding, came with its own set of technical and analytical challenges. Here’s a look at the key hurdles and how they were addressed:
 
@@ -358,9 +393,8 @@ This project, while rewarding, came with its own set of technical and analytical
 #### Challenge 4: Ethical Data Handling & Feature Selection
 *   **Problem:** The dataset contained columns that could be considered PII (`first`, `last`, `street`, `cc_num`) and potentially biased attributes (`gender`, `age`). Simply including all features in the model would be unethical and could lead to a model that discriminates unfairly.
 *   **Solution:** We established an ethical guideline from the start. All obvious PII columns were dropped during the first step of the ETL pipeline. Features like `gender` and `age` were **excluded from the model features** to prevent them from being used in the fraud classification decision. They were only retained for EDA visualizations to check for data quality or obvious imbalances in the dataset, not to build predictive rules based on them.
----
 
-### Main Data Analysis & Development Libraries
+## Main Data Analysis & Development Libraries
 
 This project leveraged a range of Python libraries for data processing, analysis, machine learning, and dashboard deployment.
 
@@ -377,191 +411,78 @@ This project leveraged a range of Python libraries for data processing, analysis
 
 #### Dashboard Development & Deployment
 *   **Power BI:** Used for creating the primary executive and operational dashboard, connecting directly to the processed CSV data.
-*   **streamlit:** Used to build the supplementary, interactive web application for technical exploration.
-*
+*   **Streamlit:** Used to build the supplementary, interactive web application for technical exploration.
 
 
 ## Ethical Considerations
 
-Ethics was treated as a **first-order concern** throughout this project, not an afterthought. Every stage from data selection to model deployment included deliberate ethical reflection. Below is full transparency on the decisions made and their rationale.
-
----
+Ethical considerations were integrated throughout this project, from data selection to model design. The following principles guided the analysis.
 
 ### Data Ethics
 
-**Choice of Synthetic Data**
-I deliberately selected a synthetically generated dataset for this project. Working with real cardholder transaction data would introduce significant data privacy obligations outside the scope of an educational project. The synthetic dataset also provides interpretable column names  merchant category, transaction hour, geographic location enabling clearer visualisations and more meaningful business communication. 
+A **synthetically generated dataset** was used to avoid privacy risks associated with real financial transaction data. This allows the project to demonstrate fraud detection techniques without exposing real customer information.
 
-**Key benefits of this choice:**
-- No real customer data at risk
-- Reproducible results for learning purposes
-- Full transparency about data provenance
+Although the dataset is synthetic, columns resembling **personally identifiable information (PII)** such as cardholder names, addresses, and card numbers were removed during the initial data cleaning stage. This reflects best practices when working with sensitive financial data.
 
-**Disclosure:** The use of synthetic data is explicitly stated in this README, within the analysis notebooks, and on the dashboards themselves.
-
-**PII Removal (Even Though Synthetic)**
-Although the dataset is simulated, it contains fields that mirror real personally identifiable information (PII):
-- Cardholder names (`first`, `last`)
-- Street address (`street`)
-- Card number (`cc_num`)
-
-These columns were dropped as the **very first step** in the data cleaning notebook — before any analysis, visualisation, or modelling was performed. This reflects the principle that PII, even synthetic, should be handled with the same discipline as real personal data. This establishes responsible habits for working with real datasets in the future.
-
-**Data Provenance & Licensing**
-The dataset is licensed under **CC0 Public Domain**, meaning no restrictions on use. However, I still credit the original creator (kartik2112 on Kaggle) as a professional courtesy.
-
----
+The dataset is licensed under **CC0 Public Domain** and sourced from *kartik2112 on Kaggle*.
 
 ### Fairness & Bias
 
-**Exclusion of Demographic Features**
-The dataset contains `gender` and `dob` (from which `age` is derived). Both were used **for EDA visualisation only** and were **explicitly excluded from the model feature set**.
+Demographic variables (`gender`, `age`) were used only during exploratory data analysis and **excluded from the model training process**. This avoids creating a model that could make predictions based on personal attributes rather than transaction behaviour.
 
-**Why this matters:**
-Using demographic attributes such as gender or age as fraud predictors risks creating a **discriminatory model** — one that flags transactions based on *who the cardholder is* rather than *what the transaction looks like*. This could:
+The model instead relies on **behavioural features** such as:
+- transaction amount
+- merchant category
+- geographic distance
+- transaction timing
 
-| Risk | Implication |
-|------|-------------|
-| **Regulatory violation** | Conflict with FCA expectations on algorithmic fairness in financial services |
-| **Legal liability** | Could constitute indirect discrimination under the Equality Act 2010 (UK) |
-| **Customer harm** | Certain demographic groups could be unfairly targeted or declined |
+If deployed in a real financial system, regular **bias audits and fairness monitoring** would be recommended.
 
-**What we did instead:**
-- Used `gender` and `age` only to check data quality during EDA
-- Documented this decision with inline comments in the feature engineering notebook
-- Built the model exclusively on transaction behaviour features
+### Model Transparency
 
-**Bias Monitoring Consideration**
-If NovaPay were to deploy this model, I would recommend:
-1. **Regular bias audits** across demographic segments
-2. **Fairness metrics** (demographic parity, equal opportunity) alongside accuracy metrics
-3. **Human oversight** for declined transactions
+Fraud detection models involve a trade-off between **precision and recall**.  
+Prioritising higher recall captures more fraud but increases false positives, while higher precision reduces customer friction but may miss fraudulent transactions.
 
----
+This trade-off is visualised in the project dashboard through a **precision–recall curve**, allowing stakeholders to adjust the classification threshold according to business priorities.
 
-### Model Transparency & Trade-offs
+### Responsible Use
 
-**The Precision-Recall Trade-off**
-The model's performance involves an inherent trade-off:
+This project is intended for **educational and portfolio purposes only** and is not designed for production deployment.
 
-| If we prioritize... | Then we accept... | Business impact |
-|--------------------|-------------------|-----------------|
-| **High Recall** (catch more fraud) | More false positives (legitimate customers declined) | Customer frustration, support costs |
-| **High Precision** (fewer false positives) | More missed fraud | Financial losses, merchant trust erosion |
-
-This trade-off is **explicitly visualised** in the dashboard using a precision-recall curve. The classification threshold is not left at the default 0.5 — it's presented as a **business decision** for NovaPay stakeholders.
-
-**Why this matters ethically:**
-False positives have a **real human impact**. A legitimate customer whose transaction is wrongly declined may:
-- Miss an important purchase
-- Experience embarrassment at checkout
-- Lose trust in NovaPay's platform
-
-These outcomes can disproportionately affect vulnerable customers if the model has learned biased patterns from training data.
-
-**Explainability**
-To ensure the model isn't a black box, I included:
-- **Feature importance charts** showing what drives predictions
-- **Clear documentation** of how each feature was engineered
-- **Interactive threshold tuning** in the Streamlit dashboard
-
----
-
-### Responsible Use & Limitations
-
-**Intended Use**
-This project is built for **educational and portfolio purposes only**. It demonstrates:
-- End-to-end data analysis workflow
-- Ethical decision-making in ML
-- Clear communication to diverse stakeholders
-
-**Not Intended For:**
-- Live deployment in production fraud detection
-- Making decisions about real customers
-- Use without further regulatory review
-
-**Requirements for Real-World Deployment**
-If NovaPay wished to deploy a similar system, they would need:
-
-1. **Further validation** on real transaction data
-2. **Independent bias auditing** by a third party
-3. **Regulatory review** under FCA guidelines
-4. **Ongoing monitoring** for model drift and fairness
-5. **Customer appeals process** for declined transactions
-
----
-
-## Ethical Takeaways
-
-This project reinforced several key ethical principles for data science:
-
-| Principle | Application |
-|-----------|-------------|
-| **Privacy by design** | Dropped PII before any analysis |
-| **Fairness first** | Excluded demographic features from modelling |
-| **Transparency** | Documented all decisions and trade-offs |
-| **Human-centered** | Considered impact of false positives on real people |
-| **Accountability** | Clear disclaimer about limitations |
-
-> *"Ethics is not a constraint on data science — it's a foundation for trustworthy, sustainable solutions."*
-
----
-
-###  Version History & Future Improvements
-
-| Date | Update |
-|------|--------|
-| [Current Date] | Initial ethical considerations documented |
-
-**Future enhancements I'd explore:**
-- Implementing SHAP values for per-transaction explainability
-- Building an interactive fairness dashboard
-- Researching differential privacy techniques for real data scenarios
+A real-world implementation would require:
+- validation on real transaction data
+- regulatory review and compliance checks
+- independent bias auditing
+- ongoing monitoring for model drift and fairness
 
 
----
-## Credits
+## Tools & Resources
 
-### Content
+**AI Assistance**
+- **Claude (Anthropic)** — used for ideation, code templates, hypothesis structuring, and troubleshooting. All generated code was reviewed and tested before use.
+- **ChatGPT** — used for occasional debugging assistance and technical clarification.
 
-- Credit Card Transactions Fraud Detection Dataset: [kartik2112 on Kaggle](https://www.kaggle.com/datasets/kartik2112/fraud-detection) — CC0 Public Domain
-- Code Institute README template: [da-README-template](https://github.com/Code-Institute-Solutions/da-README-template)
+**Project Management**
+- **GitHub Projects** — task tracking and sprint planning  
+- **Discord / Slack** — team communication during the hackathon
 
+**Documentation & Deployment**
+- **Markdown** — README documentation  
+- **Power BI** — dashboard creation and publishing  
+- **Streamlit Community Cloud** — hosting the interactive web application
 
-### Tools & Technologies
-
-**Development Environment:**
-- **Jupyter Notebook** — for interactive development and EDA
-- **VS Code** — for code editing and repository management
-- **Git & GitHub** — version control and collaboration
-
-**AI Assistance:**
-- **Claude (Anthropic)** — used for ideation, code templates, hypothesis framing, README structure, and troubleshooting. All AI-generated code was reviewed, tested, and understood before implementation.
-- **ChatGPT** — [if used] for [specific purpose, e.g., regex patterns, debugging assistance]
-
-**Project Management:**
-- **GitHub Projects** — for task tracking and sprint planning
-- **Discord/Slack** — team communication during the hackathon
-
-**Documentation:**
-- **Markdown** — README formatting
-- **Power BI** — dashboard creation and publishing
-- **Streamlit Community Cloud** — for hosting the interactive web app
-
-**Learning Resources:**
-- **Stack Overflow** — for troubleshooting code errors
-- **Kaggle** — dataset source and community notebooks for reference
-- **Code Institute learning materials** — foundational concepts and project structure
----
+**Learning Resources**
+- **Stack Overflow** — troubleshooting coding issues  
+- **Kaggle** — dataset source and community notebook references  
+- **Code Institute learning materials** — foundational concepts and project guidance
+  * Code Institute README template: [da-README-template](https://github.com/Code-Institute-Solutions/da-README-template)
 
 ## Acknowledgements
-This project was developed during a  End of Course Hackathon , and I'd like to extend my thanks to:
 
 - The **hackathon organisers** for creating such an engaging challenge
 - Our **mentors and facilitators** in particular **Vasi Pavaloi** who provided guidance when we hit roadblocks
 - The **Code Institute community** for the foundation in data analytics that made this project possible
-
-Finally, thanks to kartik2112 on Kaggle for the synthetic fraud detection dataset, which made this analysis possible while respecting data privacy principles.
+- kartik2112 on Kaggle for the synthetic fraud detection dataset, which made this analysis possible while respecting data privacy principles.
 
 # Contributors
 
